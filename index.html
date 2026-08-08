@@ -368,6 +368,211 @@ body {
     padding-top: 24px;
     padding-bottom: 52px;
   }
+from pathlib import Path
+
+src = Path("/mnt/data/vinca_site_extract/vinca-site/style.css")
+css = src.read_text(encoding="utf-8")
+
+# Make the design explicitly light even when the phone/browser is in dark mode.
+css = css.replace(
+    ':root {\n',
+    ':root {\n  color-scheme: light only;\n'
+)
+
+# Refine the palette and proportions for a softer, more brand-consistent appearance.
+replacements = {
+    '--cream: #fbf5ef;': '--cream: #F7F1EC;',
+    '--cream-2: #f6ece4;': '--cream-2: #F0E8E2;',
+    '--rose: #c4949b;': '--rose: #C49397;',
+    '--rose-dark: #9d6f77;': '--rose-dark: #9B6D73;',
+    '--lavender: #9d8bd2;': '--lavender: #8D7BC4;',
+    '--lavender-soft: #eee9f7;': '--lavender-soft: #EEEAF6;',
+    '--ink: #4c4141;': '--ink: #514747;',
+    '--muted: #746868;': '--muted: #786C6B;',
+    '--line: rgba(157,111,119,.18);': '--line: rgba(155,109,115,.18);',
+    '--white: #fffdfb;': '--white: #FFFDFC;',
+    '--shadow: 0 18px 45px rgba(100, 72, 70, .10);': '--shadow: 0 16px 38px rgba(108, 85, 82, .10);',
+    'background: var(--cream);\n  color: var(--ink);': 'background: var(--cream);\n  color: var(--ink);\n  color-scheme: light;',
+    'h1 { font-size: clamp(2.8rem, 6vw, 5.2rem); color: #5a4a4a; }': 'h1 { font-size: clamp(2.55rem, 5.5vw, 4.8rem); color: #594D4C; }',
+    'h2 { font-size: clamp(2rem, 4vw, 3.2rem); color: #5b4b4b; }': 'h2 { font-size: clamp(1.9rem, 3.8vw, 3rem); color: #594D4C; }',
+    'background: #c49a9f; color: white;': 'background: linear-gradient(145deg, #C49397 0%, #B9858B 100%); color: white;',
+    'background: #f1e4dc;': 'background: #F0E8E2;',
+    'h1 { font-size: 2.75rem; }': 'h1 { font-size: 2.45rem; }',
+    '.section { padding: 72px 0; }': '.section { padding: 62px 0; }',
+}
+
+for old, new in replacements.items():
+    css = css.replace(old, new)
+
+# Add safeguards against automatic darkening and a few mobile refinements.
+append = r'''
+
+/* =========================================================
+   Vinca Pediatria — refinamento visual v2
+   Mantém a página clara mesmo quando o celular está em modo escuro.
+   ========================================================= */
+
+html,
+body,
+.site-shell,
+.hero,
+.section,
+.intro,
+.materials,
+.instagram,
+.farewell {
+  color-scheme: light only;
+}
+
+html {
+  background: #F7F1EC !important;
+}
+
+body {
+  background-color: #F7F1EC !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light only;
+  }
+
+  html,
+  body {
+    background: #F7F1EC !important;
+    color: #514747 !important;
+  }
+
+  .hero {
+    background:
+      radial-gradient(circle at 78% 26%, rgba(141, 123, 196, .16), transparent 28%),
+      radial-gradient(circle at 15% 70%, rgba(196, 147, 151, .15), transparent 31%),
+      #F7F1EC !important;
+  }
+
+  .button-secondary,
+  .material-card,
+  .manifesto-dialog {
+    background: #FFFDFC !important;
+    color: #514747 !important;
+  }
+
+  .footer {
+    background: #F0E8E2 !important;
+  }
+}
+
+.hero-content {
+  padding-top: 38px;
+}
+
+.hero-art img {
+  border-radius: 30px;
+}
+
+.intro {
+  padding-top: 74px;
+  padding-bottom: 70px;
+}
+
+.materials {
+  padding-top: 40px;
+}
+
+.category {
+  margin-top: 40px;
+}
+
+.family-category {
+  margin-top: 52px;
+}
+
+.instagram {
+  padding-top: 34px;
+}
+
+.instagram-card {
+  box-shadow: 0 16px 36px rgba(155,109,115,.16);
+}
+
+.farewell {
+  padding-top: 58px;
+  padding-bottom: 74px;
+}
+
+@media (max-width: 520px) {
+  .hero-content {
+    padding-top: 18px;
+    padding-bottom: 24px;
+  }
+
+  .hero-art {
+    min-height: 245px;
+  }
+
+  .hero-art img {
+    width: min(300px, 84vw);
+    max-height: 350px;
+    border-radius: 24px;
+  }
+
+  .eyebrow {
+    font-size: .66rem;
+    letter-spacing: .15em;
+  }
+
+  h1 {
+    font-size: clamp(2.15rem, 11vw, 2.6rem);
+  }
+
+  h2 {
+    font-size: clamp(1.8rem, 8.5vw, 2.3rem);
+  }
+
+  .lead {
+    margin-top: 20px;
+    margin-bottom: 14px;
+    line-height: 1.58;
+  }
+
+  .promise {
+    line-height: 1.62;
+  }
+
+  .hero-actions {
+    margin-top: 23px;
+  }
+
+  .scroll-link {
+    margin-top: 22px;
+  }
+
+  .intro {
+    padding-top: 58px;
+    padding-bottom: 56px;
+  }
+
+  .intro-grid {
+    margin-top: 22px;
+  }
+
+  .materials {
+    padding-top: 42px;
+    padding-bottom: 55px;
+  }
+
+  .category {
+    margin-top: 34px;
+  }
+
+  .family-category {
+    margin-top: 44px;
+  }
+
+  .instagram {
+    padding-top: 24px;
+    padding-bottom: 52px;
+  }
 
   .instagram-card {
     padding: 28px 22px;
@@ -385,3 +590,12 @@ body {
     padding-bottom: 30px;
   }
 }
+'''
+
+css += append
+
+out = Path("/mnt/data/style-vinca-v2.css")
+out.write_text(css, encoding="utf-8")
+
+print(f"Arquivo criado: {out}")
+print(f"Tamanho: {out.stat().st_size / 1024:.1f} KB")
